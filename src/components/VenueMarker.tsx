@@ -2,7 +2,6 @@
 
 import { Marker, InfoWindow } from "@react-google-maps/api";
 import { Star, MapPin } from "lucide-react";
-import { useState } from "react";
 
 interface VenueMarkerProps {
   venue: {
@@ -15,10 +14,12 @@ interface VenueMarkerProps {
     rating?: number;
     types?: string[];
   };
+  isSelected: boolean;
+  onSelect: () => void;
+  onClose: () => void;
 }
 
-export default function VenueMarker({ venue }: VenueMarkerProps) {
-  const [showInfo, setShowInfo] = useState(false);
+export default function VenueMarker({ venue, isSelected, onSelect, onClose }: VenueMarkerProps) {
 
   const customIcon = {
     path: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z",
@@ -35,13 +36,13 @@ export default function VenueMarker({ venue }: VenueMarkerProps) {
       <Marker
         position={venue.location}
         icon={customIcon}
-        onClick={() => setShowInfo(true)}
+        onClick={onSelect}
         title={venue.name}
       />
-      {showInfo && (
+      {isSelected && (
         <InfoWindow
           position={venue.location}
-          onCloseClick={() => setShowInfo(false)}
+          onCloseClick={onClose}
         >
           <div className="p-2 max-w-xs">
             <h3 className="font-semibold text-gray-800 mb-1">{venue.name}</h3>
